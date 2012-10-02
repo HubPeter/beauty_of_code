@@ -18,6 +18,10 @@ int main(void){
 int Partition( int arr[], int b, int e ){
 	int i = b-1;
 	int j = b;
+	/*
+	int r = random(b, e);
+	exchange r and e, this will set core to the end of the patrition
+	*/
 	int key = arr[e];
 	while( j<e ){
 		if( arr[j]<=key ){
