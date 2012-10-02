@@ -20,20 +20,26 @@ return index
 int KMP( char * T, char * P ){
 	int nP = strlen( P );//length of P
 	int nT = strlen( T );//length of T
+	int pi[nP];//pi array of P
+	//initialize pi
+	for( int i = 0; i<nP; i++ ){
+		pi[i] = 0;
+	}
 	CompPi( P, pi );//Cpmpute pi of P
-	int q = 0;//status
+	int q = -1;//status
 	int i = 0;//To travelsal T with pi
 	while( i<nT ){
-		while( q>0 && P[q+1]!=T[i+1] ){
+		//q is already Ok count
+		while( q>-1 && P[q+1]!=T[i] ){
 			q = pi[q];
 		}
-		if( P[q+1]==T[i+1] ){
+		if( P[q+1]==T[i] ){
 			q = q+1;
 		}
-		i = i+1;
 		if( q==nP ){
-			return i-nP+1;
+			return i-nP;
 		}
+		i++;
 	}
 	return -1;
 }
@@ -42,18 +48,18 @@ Cpmpute pi array of P
 */
 void CompPi( char * P, int pi[] ){
 	int nP = strlen( P );
-	pi[0] = 0;
-	int k = 0;
-	int q = 0;
+	pi[0] = -1;
+	int k = -1;
+	int q = 1;//Must from 1
 	while( q<nP ){
-		while( k>0 && P[k+1]!=P[q+1] ){
+		while( k>-1 && P[k+1]!=P[q] ){
 			k = pi[k];
 		}
-		if( P[k+1]==P[q+1] ){
+		if( P[k+1]==P[q] ){
 			k = k+1;
 		}
-		q++;
 		pi[q] = k;
+		q++;
 	}
 	return ;
 }
