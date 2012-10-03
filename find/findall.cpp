@@ -3,13 +3,15 @@
 using namespace std;
 
 list<int> list1;
-void find_factor( int sum, int n );
+//void find_factor( int sum, int n );
+
 int main(void){
 	int sum = 2000;
 	int n = 2000;
 	find_factor( sum, n );
 	return 0;
 }
+/*
 void find_factor( int sum, int n ){
 	//递归出口
 	if( sum<=0 || n<=0 )
@@ -28,3 +30,4 @@ void find_factor( int sum, int n ){
 	list1.pop_front();
 	find_factor( sum, n-1 );//没有n的情况
 }
+*/
