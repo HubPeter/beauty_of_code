@@ -1,5 +1,6 @@
 /*
 生成最短摘要并输出
+way1:遍历所有可能的字符串，找出最短摘要并返回最小长度
 */
 #include<iostream>
 #include<string.h>
@@ -18,15 +19,39 @@ int main(void){
 	return 0;
 }
 int summary( char *article[], int len, char* key[], int n ){
+	bool result[3] = {false,false,false};//开关量
+	int start, end;
+	start = 0;
+	end = 0;
+	int min;
+	//find first good sequence
+	int ( int i = 0; i<len; i++ ){
+		start = i;
+		end = i;
+		while( !(result[0]&&result[1]&&result[2]) && end<len ){
+			for( int i = 0; i<n; i++ ){
+				if( strcmp(article[end], key[i])==0 ){
+					result[i] = true;
+				}
+			}
+			end++;//继续查找下一个字符串
+		}
+		if( (result[0]&&result[1]&&result[2]) ){
+			if( (end-start+1)<min ){
+				min = end-start+1;
+			}
+		}
+	}
+	return -1;//找不到
+}
+/*
+遍历所有可能的字符串
+时间复杂度：len＊len＊len＊n
+*/
+int summary0( char *article[], int len, char* key[], int n ){
 	int min = len;
 	int start ;
 	int bitn = 7;
-	/*
-	for( int i=0; i<n; i++ ){
-		bitn = bitn * 2;
-	`	bitn = bitn + 1;
-	}
-	*/
 	for( int l = n; l<=len; l++ ){//所有长度
 		//所有字符串
 		for( int j = 0; j<len-l; j++){
@@ -55,3 +80,4 @@ int summary( char *article[], int len, char* key[], int n ){
 	cout<<endl;
 	return min;
 }
+*/
