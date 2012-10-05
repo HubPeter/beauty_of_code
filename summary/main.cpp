@@ -23,9 +23,10 @@ int summary( char *article[], int len, char* key[], int n ){
 	int start, end;
 	start = 0;
 	end = 0;
-	int min;
+	int min = len;
 	//find first good sequence
-	int ( int i = 0; i<len; i++ ){
+	for ( int i = 0; i<len; i++ ){
+		result[0] = result[1] = result[2] = 0;
 		start = i;
 		end = i;
 		while( !(result[0]&&result[1]&&result[2]) && end<len ){
@@ -36,13 +37,16 @@ int summary( char *article[], int len, char* key[], int n ){
 			}
 			end++;//继续查找下一个字符串
 		}
-		if( (result[0]&&result[1]&&result[2]) ){
+		if( i==0 && !(result[0]&&result[1]&&result[2]) )
+			return -1;
+		--end;
+		if( result[0]&&result[1]&&result[2] ){
 			if( (end-start+1)<min ){
 				min = end-start+1;
 			}
 		}
 	}
-	return -1;//找不到
+	return min;//找不到
 }
 /*
 遍历所有可能的字符串
@@ -80,4 +84,4 @@ int summary0( char *article[], int len, char* key[], int n ){
 	cout<<endl;
 	return min;
 }
-*/
+
