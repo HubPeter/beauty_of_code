@@ -8,17 +8,59 @@ way1:遍历所有可能的字符串，找出最短摘要并返回最小长度
 using namespace std;
 #define K 3
 int summary( char *article[], int len, char* key[], int n );
+bool IsAllExisted( int result[], int n );
 int main(void){
 	char *article[] = {"hello","world", "my", "name", "is", "linux", \
 		"i", "lvoe", "hello", "coding", "and", "i", "am", "coding", \
 		"so", "do", "you", "love", "coding", "and", "me"};
 	char *key[3] = {"hello", "linux", "coding"};
-	int min = summary( article, sizeof(article)/sizeof(char*), key,\
-		 sizeof(key)/sizeof(char*) );
-	cout<<min<<endl;
+	int n = 3;//count of key words
+	int result[3] = {0,0,0};
+	int pBegin = 0;
+	int pEnd = 0;
+	int nLen = sizeof(article)/sizeof(char*);
+	int nMin = nLen;
+	int nAbstractBegin;
+	int nAbstractEnd;
+	while(true){
+		while(!IsAllExisted(result, n) && pEnd<nLen ){
+			for( int i = 0; i<n; i++ ){
+				if( strcmp( article[pEnd], key[i] )==0 )
+				result[i]++;
+			}
+			pEnd++;
+		}
+		while(IsAllExisted( result, n )){
+			if( pEnd-pBegin<nMin ){
+				nMin = pEnd-pBegin;
+				nAbstractBegin = pBegin;
+				nAbstractEnd = pEnd;
+			}
+			for( int i = 0; i<n; i++ ){
+				if( strcmp( article[pBegin], key[i] )==0 ){
+						result[i]--;
+				}
+			}
+			pBegin++;
+		}
+		if(pEnd>nLen){
+			break;
+		}
+	}
+	cout<<nMin<<endl;
 	return 0;
 }
-int summary( char *article[], int len, char* key[], int n ){
+bool IsAllExisted( int *result, int n ){
+	int i = 0;
+	while(i<n){
+		if( result[i]==0 ){
+			return false;
+		}
+		i++;
+	}
+	return true;
+}
+int summary1( char *article[], int len, char* key[], int n ){
 	bool result[3] = {false,false,false};//开关量
 	int start, end;
 	start = 0;
