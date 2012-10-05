@@ -2,6 +2,9 @@
 生成最短摘要并输出
 way1:遍历所有可能的字符串，找出最短摘要并返回最小长度
 */
+/*
+主函数中使用的方法的实现有问题，会进入死循环，在33行处
+*/
 #include<iostream>
 #include<string.h>
 #include<stdlib.h>
