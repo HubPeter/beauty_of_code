@@ -1,1 +1,0 @@
-gcc -o rb rb.cpp -g
