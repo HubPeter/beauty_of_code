@@ -16,8 +16,8 @@ struct NODE {
 typedef struct NODE* pNODE;
 typedef struct NODE* pTREE;
 
-pTREE tTree;//Original tree
-pTREE tReTree;//Rebuilt tree
+pTREE tTree = NULL;//Original tree
+pTREE tReTree = NULL;//Rebuilt tree
 void buildTree( pTREE* _tMyTree, int nNodeCount );
 void reBuildTree( pTREE* _tMyTree, char *sPre, char* sPreE, char *sIn, \
 	char *sInE );
@@ -39,10 +39,12 @@ int main(void){
 	cout<<"In	:";
 	cout<<sIn<<endl;
 	//重建
-	reBuildTree( &tReTree, sPre, sPre+TREESZ-1, sIn, sIn+TREESZ-1 );
+	reBuildTree( &tReTree, sPre, sPre+6, sIn, sIn+6 );
 	//得到序列
+	memset( sPre, 0, TREESZ+1 );
 	preTra( tReTree, sPre );//cover sPre
 	//输出＆对比
+	memset( sIn, 0, TREESZ+1 );
 	inTra( tReTree, sIn );//Cover :D
 	cout<<"Pre:	"<<sPre<<endl;
 	cout<<"In:	"<<sIn<<endl;
@@ -136,36 +138,65 @@ void reBuildTree( pTREE* _tMyTree, char *sPre,char* sPreE, \
 	char *sIn, char* sInE){
 	if( sPreE-sPre<0 )
 		return;
+	if( sPreE-sPre != sInE-sIn ){
+		cout<<"调用参数出错"<<endl;
+		return ;
+	}
 	//root<-sPre
 	pNODE pRoot = (pNODE)malloc( sizeof(struct NODE) );
 	char cValue = *sPre;//从前序中获取根节点
-	char *pInLeft;//中 左子树
-	char *pInRight;//中 右子树
-	char *pPreLeft;//前 左子树
-	char *pPreRight;//前 右子树
+	char *pInLeft = NULL;//中 左子树
+	char *pInRight = NULL;//中 右子树
+	char *pPreLeft = NULL;//前 左子树
+	char *pPreRight = NULL;//前 右子树
 	//root
 	pRoot->pLeft = pRoot->pRight = NULL;
 	pRoot->cValue = cValue;
-	*_tMyTree = pRoot;
+	(*_tMyTree) = pRoot;
+	if( sPreE-sPre==0 )
+		return ;
 	//___root
-	char *pRootInIn = find( sIn, sInE, cValue );
+	char *pRootInIn = find( sIn, sInE+1, cValue );//begin=<l<end
+	
+	int nLen = (sPreE - sPre);//计算总长度
 	int nLeftLen = pRootInIn - sIn;//计算左子树的长度
-	int nRightLen = strlen(sPre) - 1 -nLeftLen;//右子树的长度
+	
+	int nRightLen = nLen - 1 -nLeftLen;//右子树的长度
+	cout<<"Left:"<<nLeftLen<<"	Right:"<<nRightLen<<endl;
+	if( nRightLen==4 )
+		cout<<endl;
+	//<--------------->
 	//Root<----nLeftLen--------><---------nRightLen-----------> Pre
 	//<----nLeftLen-------->Root<---------nRightLen-----------> In
 	pPreLeft = sPre + 1;
-	pPreRight = sPre + 1 + nLeftLen;
+	pPreRight = sPre + nLeftLen;
 	pInLeft = sIn;
-	pInRight = sIn + nLeftLen + 1;
+	pInRight = sIn + nLeftLen;
+	//输出调用过程
+	
+	//___输出调用过程
+	
+	
 
 	//left	
-	reBuildTree( &((*_tMyTree)->pLeft), pPreLeft, pPreLeft+nLeftLen-1\
-		, pInLeft, pInLeft+nLeftLen-1 );
+	if( nLeftLen>0 ){
+		reBuildTree( (pTREE*)&((*_tMyTree)->pLeft),
+					pPreLeft, 
+					pPreLeft+nLeftLen-1
+					, pInLeft, 
+					pInLeft+nLeftLen-1 );
+	}
 	//___left
 	//right
-	reBuildTree( &((*_tMyTree)->pRight), pPreRight, \
-		pPreRight+nRightLen-1, pInRight, pInRight+nRightLen-1 );
+	if( nRightLen>0 ){
+		reBuildTree( &((*_tMyTree)->pRight), 
+					pPreRight,
+					pPreRight+nRightLen-1, 
+					pInRight, 
+					pInRight+nRightLen-1 );
+	}
 	//___right
+	cout<<"";
 }
 /*
 *Preorder travelsal
