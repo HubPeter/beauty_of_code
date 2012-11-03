@@ -1,6 +1,4 @@
-all:	ser server
-ser:	ser.cpp
-		g++ -o ser ser.cpp -g
+all:	server
 server:	server.cpp
 		g++ -o server server.cpp -g
 clean:
